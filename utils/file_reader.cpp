@@ -16,32 +16,40 @@ unsigned int FileReader::getColno() const {
 
 FileReader::FileReader(const std::string &path) {
     std::ifstream ifstream(path);
-    if (ifstream.is_open()){
+    if (ifstream.is_open()) {
         std::stringstream buffer;
-        buffer<<ifstream.rdbuf();
+        buffer << ifstream.rdbuf();
         ifstream.close();
-        content = std::string (buffer.str());
+        content = std::string(buffer.str());
         content_length = content.size();
-    } else{
-        fprintf(stderr,"Can't open file");
+    } else {
+        fprintf(stderr, "Can't open file");
         exit(-1);
     }
 }
 
+/**
+ * 获取一个字符
+ * @return
+ */
 int FileReader::get_char() {
-    if (cur_index<content_length){
+    if (cur_index < content_length) {
         char c = content[cur_index++];
-        if (c=='\n'){
+        if (c == '\n') {
             lineno++;
-            colno=0;
+            colno = 0;
         }
         return c;
     }
     return EOF;
 }
 
+/**
+ * 向后看一个字符
+ * @return
+ */
 int FileReader::seek() {
-    if (cur_index<content_length)
+    if (cur_index < content_length)
         return content[cur_index];
     return EOF;
 }

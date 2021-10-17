@@ -6,7 +6,7 @@
 #ifndef COMPILER_LAB_FILE_READER_H
 #define COMPILER_LAB_FILE_READER_H
 
-class FileReader{
+class FileReader {
     std::string content;// 文件内容
     unsigned int cur_index = 0; // 当前处理到的位置
     unsigned int content_length = 0; //文件内容的长度
@@ -24,4 +24,5 @@ public:
 
     int seek();// 往后看一个字符
 };
+
 #endif //COMPILER_LAB_FILE_READER_H

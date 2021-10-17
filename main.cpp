@@ -1,23 +1,40 @@
 #include <iostream>
 #include <fstream>
-
 #include "file_reader.h"
 #include "lexer.h"
 
+#ifdef TIMING
+#include <time.h>
+#endif
+
+
 int main(int argc, const char *argv[]) {
-//    std::ifstream ifstream;
-//    ifstream.open(argv[1]);
+#ifdef TIMING
+    // 开启计时
+    double dur;
+    time_t start, end;
+    start = clock();
+#endif
+#ifdef RAED_FROM_ARGV
     FileReader fileReader(argv[1]);
-//    FileReader fileReader("testfile.txt");
+#else
+    FileReader fileReader("testfile.txt");
+#endif
     Lexer lexer(&fileReader);
     std::ofstream out("output.txt");
     while (1) {
         Token token = lexer.get_token();
         if (token.type == TokenType::EOFTOK)
             break;
-//        std::cout<<token.type<<":"<<token.literal<<std::endl;
+#ifdef DEBUG_FLAG
+        std::cout << lexer.map.at(token.type) << ":" << token.literal << std::endl;
+#endif
         out << lexer.map.at(token.type) << " " << token.literal << std::endl;
     }
-//    std::cout << "Hello, World!" << std::endl;
+#ifdef TIMING
+    end = clock();
+    dur = (double) (end - start);
+    printf("Use Time:%f s\n", (dur / CLOCKS_PER_SEC));
+#endif
     return 0;
 }

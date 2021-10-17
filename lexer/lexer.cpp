@@ -69,48 +69,12 @@ Token &Lexer::get_token() {
             return token;
         }
     }
-
-//    //判断数字或者只是单纯的minu
-//    if (last_char == '-') {
-//        std::string temp_str;
-//        temp_str += (char) last_char;
-//        //下一位字符是数字说明是int,否则是-
-//        if (isdigit(SEEK)) {
-//            while (isdigit(last_char = reader->get_char())) {
-//                temp_str += (char) last_char;
-//            }
-//            //todo
-//            token = Token(TokenType::INTCON, temp_str);
-//            return token;
-//        }
-//        UPDATECHAR;
-//        token = Token(TokenType::MINU, "-");
-//        return token;
-//    }
-//    //判断数字或者只是单纯的plus
-//    if (last_char == '+') {
-//        std::string temp_str;
-//        temp_str += (char) last_char;
-//        //下一位字符是数字说明是int,否则是-
-//        if (isdigit(SEEK)) {
-//            while (isdigit(last_char = reader->get_char())) {
-//                temp_str += (char) last_char;
-//            }
-//            //todo
-//            token = Token(TokenType::INTCON, temp_str);
-//            return token;
-//        }
-//        UPDATECHAR;
-//        token = Token(TokenType::MINU, "+");
-//        return token;
-//    }
     if (isdigit(last_char)) {
         std::string num_str;
         do {
             num_str += (char) last_char;
             UPDATECHAR;
         } while (isdigit(last_char));
-
 //        if (isdigit(SEEK)) {
 //            while (isdigit(last_char = reader->get_char())) {
 //                num_str += (char) last_char;
@@ -246,7 +210,7 @@ Token &Lexer::get_token() {
         token = Token(TokenType::EOFTOK, "");
         return token;
     }
-//    UPDATECHAR;
-//    token = Token(TokenType::UNREGONIZED, "");
-//    return token;
+    UPDATECHAR;
+    token = Token(TokenType::UNREGONIZED, "");
+    return token;
 }

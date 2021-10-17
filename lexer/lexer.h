@@ -20,8 +20,15 @@ private:
     FileReader *reader;
 
 public:
+    /**
+     * 记录enum与其对应的string
+     */
     unordered_map<TokenType, std::string> map;
 
+    /**
+     *
+     * @param reader
+     */
     explicit Lexer(FileReader *reader) : reader(reader) {
         map.insert(pair<TokenType, std::string>(TokenType::IDENFR, "IDENFR"));
         map.insert(pair<TokenType, std::string>(TokenType::INTCON, "INTCON"));
