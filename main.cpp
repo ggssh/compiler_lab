@@ -27,9 +27,10 @@ int main(int argc, const char *argv[]) {
         if (token.type == TokenType::EOFTOK)
             break;
 #ifdef DEBUG_FLAG
-        std::cout << lexer.map.at(token.type) << ":" << token.literal << std::endl;
+//        std::cout << lexer.map.at(token.type) << ":" << token.literal << std::endl;
 #endif
-        out << lexer.map.at(token.type) << " " << token.literal << std::endl;
+//        out << lexer.map.at(token.type) << " " << token.literal << std::endl;
+        out << token.get_type() << " " << token.literal << std::endl;
     }
 #ifdef TIMING
     end = clock();

@@ -101,7 +101,7 @@ Token &Lexer::get_token() {
 
         //判断字符
     else if (last_char == '\'') {
-        int count;//记录被单引号包裹的字符的数量,如果大于1的话就报错
+//        int count;//记录被单引号包裹的字符的数量,如果大于1的话就报错
         std::string str;
         while ((last_char = reader->get_char()) != '\'') {
             str += last_char;

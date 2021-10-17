@@ -54,6 +54,7 @@ public:
 // token的属性类型
     std::string literal; // token的值
     TokenType type;
+    std::string get_type();
 private:
     // 用于进行测试输出
     void display();
