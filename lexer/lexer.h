@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include "token.h"
 #include "file_reader.h"
+#include "error.h"
 
 using namespace std;
 
@@ -18,7 +19,7 @@ class Lexer {
 private:
     std::string ident;
     FileReader *reader;
-
+    ErrorLogger *logger;
 public:
     /**
      * 记录enum与其对应的string
@@ -26,10 +27,14 @@ public:
     unordered_map<TokenType, std::string> map;
 
     /**
-     *
+     * 构造函数
      * @param reader
+     * @param error_stream
      */
-    explicit Lexer(FileReader *reader) : reader(reader) {
+    explicit Lexer(FileReader *reader, ostream &error_stream) : reader(reader) {
+        // 构造一个ErrorLogger
+        logger = new ErrorLogger(error_stream);
+        // 初始化TokenMap
         map.insert(pair<TokenType, std::string>(TokenType::IDENFR, "IDENFR"));
         map.insert(pair<TokenType, std::string>(TokenType::INTCON, "INTCON"));
         map.insert(pair<TokenType, std::string>(TokenType::CHARCON, "CHARCON"));
@@ -68,6 +73,10 @@ public:
         map.insert(pair<TokenType, std::string>(TokenType::RBRACE, "RBRACE"));
     }
 
+    /**
+     * 得到一个token
+     * @return
+     */
     Token &get_token();
 };
 

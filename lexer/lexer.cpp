@@ -69,44 +69,41 @@ Token &Lexer::get_token() {
             return token;
         }
     }
+    // 判断数字
     if (isdigit(last_char)) {
         std::string num_str;
         do {
             num_str += (char) last_char;
             UPDATECHAR;
         } while (isdigit(last_char));
-//        if (isdigit(SEEK)) {
-//            while (isdigit(last_char = reader->get_char())) {
-//                num_str += (char) last_char;
-//            }
-//            //todo
-//        }
-//        UPDATECHAR;
-//        reader->get_char();
         token = Token(TokenType::INTCON, num_str);
         return token;
     }
 
-    //判断字符串
+    // 判断字符串
     if (last_char == '\"') {
         std::string str;
         while ((last_char = reader->get_char()) != '\"') {
             str += last_char;
         }
         UPDATECHAR;
-        //todo
+        //todo 字符串中间可能会含有引号
         token = Token(TokenType::STRCON, str);
         return token;
     }
 
         //判断字符
     else if (last_char == '\'') {
-        int count;//记录被单引号包裹的字符的数量,如果大于1的话就报错
+        int count = 0;//记录被单引号包裹的字符的数量,如果大于1的话就报错
         std::string str;
         while ((last_char = reader->get_char()) != '\'') {
             str += last_char;
+            count++;
         }
-        // todo 这里需要进行错误处理
+        if (count!=1){
+
+        }
+        // todo 如果两个单引号包裹的内容为多个字符的话要报错
         UPDATECHAR;
         token = Token(TokenType::CHARCON, str);
         return token;
@@ -213,4 +210,8 @@ Token &Lexer::get_token() {
     UPDATECHAR;
     token = Token(TokenType::UNREGONIZED, "");
     return token;
+}
+
+FileReader *Lexer::getReader() const {
+    return reader;
 }

@@ -14,14 +14,34 @@ class FileReader {
     unsigned int colno = 0;// 列号
 
 public:
+    /**
+     *
+     * @param path
+     */
     explicit FileReader(const std::string &path);
 
+    /**
+     * 获得行号
+     * @return
+     */
     unsigned int getLineno() const;
 
+    /**
+     * 获得列号
+     * @return
+     */
     unsigned int getColno() const;
 
+    /**
+     * 获取当前index的字符并使index+1
+     * @return
+     */
     int get_char();// 获取当前字符
 
+    /**
+     * 查看当前index的字符
+     * @return
+     */
     int seek();// 往后看一个字符
 };
 

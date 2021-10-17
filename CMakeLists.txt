@@ -10,6 +10,8 @@ aux_source_directory(lexer LEXER)
 message(STATUS "lexer目录:${LEXER}")
 aux_source_directory(utils UTILS)
 message(STATUS "utils目录:${UTILS}")
+aux_source_directory(err ERR)
+message(STATUS "err目录:${ERR}")
 
 # 如果READ_FROM_ARGV则从命令行参数中读取文件
 add_compile_definitions(compiler_lab PUBLIC RAED_FROM_ARGV)
@@ -18,8 +20,9 @@ add_compile_definitions(compiler_lab PUBLIC DEBUG_FLAG)
 # 如果TIMING开启则输出运行的时间
 add_compile_definitions(compiler_lab PUBLIC TIMING)
 
-include_directories(compiler_lab lexer utils)
+include_directories(compiler_lab lexer utils err)
 add_executable(compiler_lab
         main.cpp
         ${LEXER}
-        ${UTILS})
+        ${UTILS}
+        ${ERR})

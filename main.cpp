@@ -4,9 +4,10 @@
 #include "lexer.h"
 
 #ifdef TIMING
-#include <time.h>
-#endif
 
+#include <ctime>
+
+#endif
 
 int main(int argc, const char *argv[]) {
 #ifdef TIMING
@@ -15,12 +16,13 @@ int main(int argc, const char *argv[]) {
     time_t start, end;
     start = clock();
 #endif
+
 #ifdef RAED_FROM_ARGV
     FileReader fileReader(argv[1]);
 #else
     FileReader fileReader("testfile.txt");
 #endif
-    Lexer lexer(&fileReader);
+    Lexer lexer(&fileReader, cerr);
     std::ofstream out("output.txt");
     while (1) {
         Token token = lexer.get_token();
@@ -31,10 +33,12 @@ int main(int argc, const char *argv[]) {
 #endif
         out << lexer.map.at(token.type) << " " << token.literal << std::endl;
     }
+
 #ifdef TIMING
     end = clock();
     dur = (double) (end - start);
     printf("Use Time:%f s\n", (dur / CLOCKS_PER_SEC));
 #endif
+
     return 0;
 }

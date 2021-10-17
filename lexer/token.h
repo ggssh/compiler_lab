@@ -6,6 +6,9 @@
 #ifndef COMPILER_LAB_TOKEN_H
 #define COMPILER_LAB_TOKEN_H
 
+/**
+ * Token类型
+ */
 enum TokenType {
     EOFTOK = 0,// 文件结束
     IDENFR,// 标识符
@@ -47,17 +50,12 @@ enum TokenType {
     UNREGONIZED //无法被识别
 };
 
-
 class Token {
 public:
     Token(TokenType type, const std::string &literal);
 // token的属性类型
     std::string literal; // token的值
     TokenType type;
-private:
-    // 用于进行测试输出
-    void display();
-
 };
 
 #endif //COMPILER_LAB_TOKEN_H

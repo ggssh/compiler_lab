@@ -23,15 +23,11 @@ FileReader::FileReader(const std::string &path) {
         content = std::string(buffer.str());
         content_length = content.size();
     } else {
-        fprintf(stderr, "Can't open file");
+        std::cerr << "Cannot open file" << std::endl;
         exit(-1);
     }
 }
 
-/**
- * 获取一个字符
- * @return
- */
 int FileReader::get_char() {
     if (cur_index < content_length) {
         char c = content[cur_index++];
@@ -44,10 +40,6 @@ int FileReader::get_char() {
     return EOF;
 }
 
-/**
- * 向后看一个字符
- * @return
- */
 int FileReader::seek() {
     if (cur_index < content_length)
         return content[cur_index];
