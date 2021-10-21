@@ -52,7 +52,7 @@ enum TokenType {
 
 class Token {
 public:
-    Token(TokenType type, const std::string &literal);
+    Token(TokenType type, std::string literal);
 // token的属性类型
     std::string literal; // token的值
     TokenType type;

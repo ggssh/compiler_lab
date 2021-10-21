@@ -2,6 +2,7 @@
 #include <fstream>
 #include "file_reader.h"
 #include "lexer.h"
+#include "parser.h"
 
 #ifdef TIMING
 
@@ -24,16 +25,17 @@ int main(int argc, const char *argv[]) {
 #endif
     Lexer lexer(&fileReader, cerr);
     std::ofstream out("output.txt");
-    while (1) {
-        Token token = lexer.get_token();
-        if (token.type == TokenType::EOFTOK)
-            break;
-#ifdef DEBUG_FLAG
-        std::cout << lexer.map.at(token.type) << ":" << token.literal << std::endl;
-#endif
-        out << lexer.map.at(token.type) << " " << token.literal << std::endl;
-    }
-
+//    while (1) {
+//        Token token = lexer.get_token();
+//        if (token.type == TokenType::EOFTOK)
+//            break;
+//#ifdef DEBUG_FLAG
+//        std::cout << lexer.map.at(token.type) << ":" << token.literal << std::endl;
+//#endif
+//        out << lexer.map.at(token.type) << " " << token.literal << std::endl;
+//    }
+    Parser parser(lexer, out);
+    parser.parseProgram();
 #ifdef TIMING
     end = clock();
     dur = (double) (end - start);

@@ -4,4 +4,6 @@
 
 #include "token.h"
 
-Token::Token(TokenType type, const std::string &literal) : type(type), literal(literal) {}
+#include <utility>
+
+Token::Token(TokenType type, std::string literal) : type(type), literal(std::move(literal)) {}

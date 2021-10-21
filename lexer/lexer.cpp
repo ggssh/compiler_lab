@@ -2,10 +2,10 @@
 // Created by ggssh on 2021/10/16 0016.
 //
 #include "lexer.h"
-
+static Token token(TokenType::UNREGONIZED, "");
 Token &Lexer::get_token() {
     static int last_char = ' ';
-    static Token token(TokenType::UNREGONIZED, "");
+
     // 跳过空格
     while (isspace(last_char)) {
         UPDATECHAR;
@@ -100,7 +100,7 @@ Token &Lexer::get_token() {
             str += last_char;
             count++;
         }
-        if (count!=1){
+        if (count != 1) {
 
         }
         // todo 如果两个单引号包裹的内容为多个字符的话要报错
@@ -210,8 +210,4 @@ Token &Lexer::get_token() {
     UPDATECHAR;
     token = Token(TokenType::UNREGONIZED, "");
     return token;
-}
-
-FileReader *Lexer::getReader() const {
-    return reader;
 }
