@@ -71,6 +71,11 @@ public:
     void parseConstDef();
 
     /**
+     * 声明头部
+     */
+    void parseDeclHeader();
+
+    /**
      * 变量说明
      */
     void parseVarStmt();
@@ -104,6 +109,86 @@ public:
      * 步长
      */
     void parseStep();
+
+    /**
+     * 语句
+     */
+    void parseStmt();
+
+    /**
+     * 语句列
+     */
+    void parseStmtList();
+
+    /**
+     * 复合语句
+     */
+    void parseMulStmt();
+
+    /**
+     * 赋值语句
+     */
+    void parseAssignStmt();
+
+    /**
+     * 条件语句
+     */
+    void parseCondStmt();
+
+    /**
+     * 条件
+     */
+    void parseCond();
+
+    /**
+     * 循环语句
+     */
+    void parseLoopStmt();
+
+    /**
+     * 值参数表
+     */
+    void parseValArgList();
+
+    /**
+     * 读语句
+     */
+    void parseReadStmt();
+
+    /**
+     * 写语句
+     */
+    void parseWriteStmt();
+
+    /**
+     * 返回语句
+     */
+    void parseReturnStmt();
+
+    /**
+     * 主函数
+     */
+    void parseMain();
+
+    /**
+     * 参数表
+     */
+    void parseArgList();
+
+    /**
+     * 表达式
+     */
+    void parseExpr();
+
+    /**
+     * 项
+     */
+    void parseItem();
+
+    /**
+     * 因子
+     */
+    void parseFactor();
 };
 
 #endif //COMPILER_LAB_PARSER_H
