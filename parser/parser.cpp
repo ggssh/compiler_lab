@@ -43,12 +43,32 @@ void Parser::getNextToken() {
 // ＜程序＞ ::= ［＜常量说明＞］［＜变量说明＞］{＜有返回值函数定义＞|＜无返回值函数定义＞} ＜主函数＞
 void Parser::parseProgram() {
     getNextToken();//获得第一个token,此时tokIndex=1;
+    //判断是否存在常量说明
     if (curTok.type == TokenType::CONSTTK) {
         parseConstStmt();
         getNextToken();
     }
-    if ((curTok.type == TokenType::INTTK || curTok.type == TokenType::CHARTK)) {}
-
+    //判断是否存在变量说明
+    if ((curTok.type == TokenType::INTTK || curTok.type == TokenType::CHARTK)
+        && (seekN(2).type == TokenType::SEMICN || seekN(2).type == TokenType::COMMA ||
+            seekN(2).type == TokenType::LBRACK)) {
+        parseVarStmt();
+        getNextToken();
+    }
+    //判断是否存在函数定义
+    while (((curTok.type == TokenType::INTTK || curTok.type == TokenType::CHARTK) &&
+            seekN(2).type == TokenType::LPARENT && seekN(1).type != TokenType::MAINTK)
+           || (curTok.type == TokenType::VOIDTK && seekN(2).type == TokenType::LPARENT &&
+               seekN(1).type != TokenType::MAINTK)) {
+        if (((curTok.type == TokenType::INTTK || curTok.type == TokenType::CHARTK) &&
+             seekN(2).type == TokenType::LPARENT)) {
+            parseFuncDef();
+            getNextToken();//eat 有返回值函数定义
+        } else if (curTok.type == TokenType::VOIDTK && seekN(2).type == TokenType::LPARENT) {
+            parseVoidFuncDef();
+            getNextToken();//eat 无返回值函数定义
+        }
+    }
     parseMain();//分析主函数
     out << "<程序>" << endl;
 }
@@ -129,7 +149,8 @@ void Parser::parseConstDef() {
 void Parser::parseVarStmt() {
     parseVarDef();
     getNextToken();//当前token为 ;
-    while (seekN(1).type == TokenType::INTTK || seekN(1).type == TokenType::CHARTK) { ;//如果下一个token属于类型标识符{
+    while ((seekN(1).type == TokenType::INTTK || seekN(1).type == TokenType::CHARTK) &&
+           seekN(3).type != TokenType::LPARENT) { ;//如果下一个token属于类型标识符{
         getNextToken();//eat ;
         parseVarDef();
         getNextToken();//当前token为 ;
@@ -141,21 +162,30 @@ void Parser::parseVarStmt() {
 //＜无符号整数＞表示数组元素的个数，其值需大于0
 void Parser::parseVarDef() {
     getNextToken();//eat 类型标识符
-    getNextToken();//eat 标识符
-    if (curTok.type == TokenType::LBRACK) {
+    if (seekN(1).type == TokenType::LBRACK) {
+        getNextToken();//eat 标识符
         getNextToken();//eat [
         parseUnsignedInteger();//处理无符号整数
-        getNextToken();//当前token为 ]
+        getNextToken();//eat 无符号整数
     }
-    do {
+    while (seekN(1).type == TokenType::COMMA) {
+        getNextToken();
         getNextToken();//eat ,
-        getNextToken();//eat 标识符
         if (curTok.type == TokenType::LBRACK) {
             getNextToken();//eat [
             parseUnsignedInteger();//处理无符号整数
-            getNextToken();//当前token为 ]
+            getNextToken();//eat 无符号整数
         }
-    } while (seekN(1).type == TokenType::SEMICN);
+    }
+//    do {
+//        getNextToken();//eat ,
+//        getNextToken();//eat 标识符
+//        if (curTok.type == TokenType::LBRACK) {
+//            getNextToken();//eat [
+//            parseUnsignedInteger();//处理无符号整数
+//            getNextToken();//当前token为 ]
+//        }
+//    } while (seekN(1).type == TokenType::SEMICN);
     out << "<变量定义>" << endl;
 }
 
@@ -244,12 +274,12 @@ void Parser::parseStmt() {
         if (has_retval[curTok.literal]) {
             parseFuncCall();
             getNextToken();//eat 有返回值函数调用语句
-        } else if (!has_retval[curTok.literal]) {
-            parseVoidFuncCall();
-            getNextToken();//eat 无返回值函数调用语句
         } else if (seekN(1).type == TokenType::ASSIGN || seekN(1).type == TokenType::LBRACK) {
             parseAssignStmt();
             getNextToken();//eat 赋值语句
+        } else if (!has_retval[curTok.literal]) {
+            parseVoidFuncCall();
+            getNextToken();//eat 无返回值函数调用语句
         }
     } else if (curTok.type == TokenType::SCANFTK) {
         parseReadStmt();
@@ -271,6 +301,9 @@ void Parser::parseStmtList() {
     if (curTok.type != TokenType::RBRACE) {
         while (seekN(1).type != TokenType::RBRACE) {
             parseStmt();
+            if (seekN(1).type != TokenType::RBRACE) {
+                getNextToken();
+            }
         }
     }
     out << "<语句列>" << endl;
@@ -409,6 +442,7 @@ void Parser::parseValArgList() {
         while (seekN(1).type == TokenType::COMMA) {
             getNextToken();//eat 表达式
             getNextToken();//eat ,
+            parseExpr();
         }
     }
     out << "<值参数表>" << endl;
@@ -543,7 +577,7 @@ void Parser::parseFactor() {
         parseExpr();
         getNextToken();//eat 表达式
     } else if (curTok.type == TokenType::INTCON || curTok.type == TokenType::PLUS || curTok.type == TokenType::MINU) {
-        //do nothing
+        parseInteger();
     } else if (curTok.type == TokenType::CHARCON) {
         //do nothing
     }
