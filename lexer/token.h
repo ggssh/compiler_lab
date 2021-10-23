@@ -56,6 +56,7 @@ public:
 // token的属性类型
     std::string literal; // token的值
     TokenType type;
+    std::string get_type();
 };
 
 #endif //COMPILER_LAB_TOKEN_H
